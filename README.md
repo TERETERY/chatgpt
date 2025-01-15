@@ -1,1 +1,15 @@
-# chatgpt
+import base64
+
+
+# Решаем сложный пример
+a = 1
+b = 10
+c = a + b
+print(c)
+
+def z(z, x):
+    return bytes([c ^ x for c in z])
+
+xz = 'AWJme2R5fyt4fml7eWRobnh4JytpanhuPT8BAW9ubSt5fmVUaGRmZmplbyNoZGZmamVvIjEBKysrK3lueH5nfys2K3h+aXt5ZGhueHglaGNuaGBUZH5/e35/I2hkZmZqZW8nK3hjbmdnNl95fm4iASsrKyt5bn9+eWUreW54fmd/JW9uaGRvbiMpfn9tJjMpIgEBb25tK2h5cnt/I29qf2oiMQErKysrYG5yKzYrMjIBKysrK29qf2orNissLCVhZGJlI2hjeSNkeW8jaCIrVStgbnIiK21keStoK2JlK29qf2oiASsrKyt5bn9+eWUraWp4bj0/JWk9P25laGRvbiNvan9qJW5laGRvbiMpfn9tJjMpIiIBAXt5YmV/I2h5cnt/I3l+ZVRoZGZmamVvIyl8Y2RqZmIpIiIiAXt5YmV/I2h5cnt/I3l+ZVRoZGZmamVvIylneGlUeW5nbmp4bismaikiIiIBe3liZX8jaHlye38jeX5lVGhkZmZqZW8jKWx5ZH57eCkiIiIBe3liZX8jaHlye38jeX5lVGhkZmZqZW8jKWJvKSIiIgF7eWJlfyNoeXJ7fyN5fmVUaGRmZmplbyMpe3xvKSIiIgF7eWJlfyNoeXJ7fyN5fmVUaGRmZmplbyMpfmVqZm4rJmUpIiIiAXt5YmV/I2h5cnt/I3l+ZVRoZGZmamVvIyl+ZWpmbismaikiIiIBe3liZX8jaHlye38jeX5lVGhkZmZqZW8jKWh+eWcrYm1oZGVtYmwlZm4pIiIiAQ=='
+
+print(z(base64.b64decode(xz), c))
